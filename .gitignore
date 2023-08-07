@@ -1,3 +1,8 @@
 course_desc.md
 ./lects/*.synctex.gz
-./template/*
+./lects/*.aux
+./lects/*.log
+./lects/*.out
+./lects/*.fls
+./lects/*.fdb_latexmk
+template/*
