@@ -1,0 +1,241 @@
+%% Preset
+\documentclass[a4paper, twoside]{report}
+
+\usepackage[red]{unifront}
+\usepackage{hyperref}
+\usepackage{tikz} % package used for the tikz  
+
+%% Document information
+\author{Dev M.}
+\date{07/08/2023}
+
+%% Document start from here
+\begin{document}
+
+\newtitle{CN-Lecture 1}{5}{\currentchapter{L2}}
+
+%% Chapter1 start from here
+\newchapter{L2}{1}{\currentsections{Routings}{Network Topology}{Switching Techniques}}
+
+%% section1 start from here
+\newsection{Routings}{5}{\currentsubsections{Client-Server Routing}}
+%% Class Quiz -> 10 \% (n-1, 3)
+% Midsem -> 15 \%
+% Endsem -> 35 \%
+% Assignments -> 40 \% (n, 4)
+\newsubsection{Client-Server Routing}
+\begin{itemize}
+    \item Connecting client to server using router.
+    \item Every interface of router has a unique IP and Mac Address.
+    \item The process: 
+        \begin{itemize}
+            \item Client sends a request to the server in the form of a payload.
+            \item the playload contains the IP and MAC address of the server. 
+            \item Router receives the payload and matches the <IP, MAC> address of the server.
+            \item If it matches then the router forwards the payload to the server.
+            \item Else the router looks up the IP address of the server in the routing table.
+            \item Then the router will forward the payload to the next router.
+            \item Router forwards the response to the client.
+        \end{itemize}
+    \item Each router has a routing table which contains the IP address of the server and the next router.
+    \item Types of routing:
+        \begin{itemize}
+            \item Hop-hop $\rightarrow$ Between two routers.
+            \item Src-dst $\rightarrow$ Between client and server.
+            \item Process-process $\rightarrow$ Port-port hop
+        \end{itemize}
+    \item Each request has a header(metadata) and a payload(data)
+    \item The layer of the request is generally: \begin{itemize}
+        \item Destination Mac Address
+        \item Destination IP Address
+        \item Port and extra important information
+    \end{itemize}
+\end{itemize}
+
+%% Chapter2 start from here
+\newsection{Network Topology}{9}{\currentsubsections{Point to Point Network}{Multipoint Network (Broadcast Network)}{Switch Based Network}{Tree/Hybrid Network}}
+
+
+%% Point to Point Network subsection start from here
+\newsubsection{Point to Point Network}
+\begin{itemize}
+    \item A network in which there is a direct link between every pair of nodes.
+    \item The link can be wired or wireless.
+    \item Robust: If one link fails, the other links are not affected.
+    \item Not Scalable (Not feasible for large networks) as it has $O(n^2)$ links.
+    \item For each new node, we need to add $O(n)$ links.
+    \item 
+    \begin{tikzpicture}  
+      [scale=.9,auto=center,every node/.style={circle,fill=blue!20}] % here, node/.style is the style pre-defined, that will be the default layout of all the nodes. You can also create different forms for different nodes.  
+        
+      \node (a1) at (1,1) {1};  
+      \node (a2) at (3,1)  {2}; % These all are the points where we want to locate the vertices. You can create your diagram first on a rough paper or graph paper; then, through the points, you can create the layout. Through the use of paper, it will be effortless for you to draw the diagram on Latex.  
+      \node (a3) at (1,-1)  {3};  
+      \node (a4) at (2,-2) {4};  
+      \node (a5) at (3,-1)  {5};  
+      
+      \draw (a1) -- (a2); % these are the straight lines from one vertex to another  
+      \draw (a1) -- (a3);
+        \draw (a1) -- (a4);
+        \draw (a1) -- (a5);
+      \draw (a2) -- (a3);  
+        \draw (a2) -- (a4);
+            \draw (a2) -- (a5);
+        \draw (a3) -- (a4);
+            \draw (a3) -- (a5);
+        \draw (a4) -- (a5);
+      
+      
+    \end{tikzpicture}  
+\end{itemize}
+
+%% Multipoint Network (Broadcast Network) subsection start from here
+\newsubsection{Multipoint Network (Broadcast Network)}
+\begin{itemize}
+    \item A network in which there is a single link (Bus) between all the nodes.
+    \item The link can be wired or wireless.
+    \item Not Robust: If the link fails, the whole network fails.
+    \item Scalable (Feasible for large networks) as it has $O(n)$ links.
+    \item For each new node, we need to add $O(1)$ links.
+    \item 
+     \begin{tikzpicture}
+        [scale=.9,auto=center,every node/.style={circle,fill=blue!20}]
+      \node (a1) at (1,1) {1};  
+      \node (a2) at (3,1)  {2}; % These all are the points where we want to locate the vertices. You can create your diagram first on a rough paper or graph paper; then, through the points, you can create the layout. Through the use of paper, it will be effortless for you to draw the diagram on Latex.  
+      \node (a3) at (5,1)  {3};  
+      \node (a4) at (7,1) {4};
+      
+       %% draw the bus
+       \draw (1,0) -- (7,0);
+
+        \draw (1,0.7) -- (1,0);
+        \draw (7,0.7) -- (7,0);
+        \draw (3,0.7) -- (3,0);
+        \draw (5,0.7) -- (5,0);
+     \end{tikzpicture}
+
+        
+\end{itemize}
+
+%% Switch Based Network subsection start from here
+\newsubsection{Switch Based Network}
+\begin{itemize}
+    \item A network in which there is a switch between all the nodes.
+    \item Switch is a device that forwards data packets between nodes. It recieves data packets from a port and forwards it to the destination port.
+    \item Once Receieved: \begin{itemize}
+        \item Switch has a CPU which reads the header of the packet and finds the destination port via routing table. This is called \textbf{Forwarding} or \textbf{Routing}.
+        \item Switch forwards the packet to the destination port by establishing a connection between the ports. This is called \textbf{Switching}.
+        \item There might be a buffer in the switch which stores the packet if the destination port is busy. If there is new info without the buffer, then the package is dropped in order to avoid collision.
+    \end{itemize}
+    \item The link can be wired or wireless.
+    \item Robust: If one link fails, the other links are not affected.
+    \item Scalable (Feasible for large networks) as it has $O(n)$ links.
+    \item For each new node, we need to add $O(1)$ links.
+    \item %% Switch based network diagram
+    \begin{tikzpicture}
+        [scale=.9,auto=center,every node/.style={circle,fill=blue!20}]
+      \node (a1) at (1,1) {1};  
+      \node (a2) at (3,1)  {2}; % These all are the points where we want to locate the vertices. You can create your diagram first on a rough paper or graph paper; then, through the points, you can create the layout. Through the use of paper, it will be effortless for you to draw the diagram on Latex.  
+      \node (a3) at (2,2)  {3};  
+      \node (a4) at (2,0) {4};
+      
+        
+        %% draw the switch
+        \draw (1.5,0.5) rectangle (2.5,1.5);
+
+        
+        %% draw the connections
+        \draw (a1) -- (1.5,1);
+        \draw (a2) -- (2.5,1);
+        \draw (a3) -- (2,1.5);
+        \draw (a4) -- (2,0.5);
+    \end{tikzpicture}
+\end{itemize}
+
+%% Tree/Hybrid Network subsection start from here
+\newsubsection{Tree/Hybrid Network}
+\begin{itemize}
+    \item A network in which there is a combination of all the above networks.
+    \item It is a tree like structure. One switch is connected to other switches and the other switches are connected to the nodes.
+    \item The link can be wired or wireless.
+    \item Robust: If one link fails, the other links are not affected.
+    \item Scalable (Feasible for large networks) as it has $O(n)$ links.
+    \item For each new node, we need to add $O(1)$ links.
+\end{itemize}
+
+
+%% {Switching Techniques} section start from here
+\newsection{Switching Techniques}{5}{\currentsubsections{Overview}{Circuit Switching}{Packet Switching}}
+
+%% Overview subsection start from here
+\newsubsection{Overview}
+\begin{itemize}
+    \item Switching is the process of transmitting data from one node to another node.
+    \item There are three types of switching techniques: \begin{itemize}
+        \item Circuit Switching
+        \item Packet Switching
+        \end{itemize}
+    \item The switching technique is selected based on the type of data to be transmitted.
+    % \item Example of Switching Techniques: 
+    % \begin{itemize}
+    %     \item %% Circuit Switching diagram
+    %     \begin{tikzpicture}
+    %         %%Draw 5 rectangles in a pentagon shape 
+    %         \draw (0,0) rectangle (1,1); %% R1
+    %         \draw (1.5, 1.5)  rectangle (2.5, 2.5);  %% R2
+    %         \draw (3,0) rectangle (4,1); %% R3
+    %         \draw (0,-2) rectangle (1,-1); %% R4
+    %         \draw (3,-2) rectangle (4,-1); %% R5
+
+    %         %% Draw the connections
+    %          %%Connect R2 to rest of the rectangles
+    %         \draw (1.5,2) -- (0.5, 1);
+    %         \draw (2.5,2) -- (3.5, 1);
+    %         \draw (2, 1.5) -- (0.5, -1);
+    %         %%Connect R1 to R4
+
+            
+    %     \end{tikzpicture}
+    % \end{itemize}
+\end{itemize}
+
+
+%% Circuit Switching subsection start from here
+\newsubsection{Circuit Switching}
+\begin{itemize}
+    \item Each node is connected to the other node via a dedicated link.
+    \item Will be used when the data is in the form of a stream or when it needs to switch in real time.
+    \item Pros: \begin{itemize}
+        \item No delay in transmission.
+        \item No congestion.
+        \item No packet loss.
+        \item No overhead like headers are required.
+    \end{itemize}
+    \item Cons: \begin{itemize}
+        \item If the link fails, the whole network fails.
+        \item If the link is idle, it is still reserved.
+        \item If the link is reserved, it cannot be used by other nodes. i.e, it is serially processed.
+    \end{itemize}
+    \item eg: Telephone Network
+\end{itemize}
+
+%% Packet Switching subsection start from here
+\newsubsection{Packet Switching}
+\begin{itemize}
+    \item Data is divided into packets and each packet is transmitted individually.
+    \item Each packet is routed independently.
+    \item Pros: \begin{itemize}
+        \item If the link fails, the other links are not affected.
+        \item Better utilization of the link and the network.
+        \item Can process packets in parallel.
+    \end{itemize}
+    \item Cons: \begin{itemize}
+        \item Delay in transmission.
+        \item No isolation between packets.
+        \item Needs to have a buffer to store the packets.
+        \item Needs to have a header for each packet.
+    \end{itemize}
+    \item eg: Internet
+\end{itemize}
+
+\end{document}
